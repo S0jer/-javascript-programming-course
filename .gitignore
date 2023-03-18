@@ -1,0 +1,6 @@
+/notepad.txt
+.vscode
+.idea
+coverage
+mongodb
+node_modules
