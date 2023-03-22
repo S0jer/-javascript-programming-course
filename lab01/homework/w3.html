@@ -11,7 +11,7 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="ex3w3.css" />
+    <link rel="stylesheet" href="w3.css" />
     <title>
       Tytuł strony / Page Title
     </title>
@@ -21,7 +21,7 @@
       <a href="javascript:void(0)" class="w3-bar-item w3-button w3-hover-pale-yellow w3-left w3-hide-large w3-hide-medium"
         onclick="myFunction()">&#9776;</a>
         <div class="w3-bar-item w3-button w3-hide-small">
-          <i class="fa fa-shopping-cart"></i>
+          <canvas id="logo" class="logo" ></canvas>
         </div>
         
         <div class="w3-dropdown-hover w3-hide-small">
@@ -63,7 +63,6 @@
         </div>
     </div>
     </div>
-
     <script>
       function myFunction() {
         var x = document.getElementById("demo");
@@ -73,17 +72,109 @@
           x.className = x.className.replace(" w3-show", "");
         }
       }
-    </script>
 
+      "use strict"; // Nie wyłączaj trybu ścisłego    
+      var logo = document.getElementById('logo');
+      var ctx = logo.getContext('2d');        
+
+      ctx.rect(10, 75, 120, 100);
+      ctx.fill();
+
+      ctx.arc(200, 200, 100, 0, 2 * Math.PI);
+      ctx.fill(); 
+
+      ctx.moveTo(200,200);
+      ctx.lineTo(150,50);
+      ctx.lineTo(600,400);
+      ctx.fill();
+
+    </script>
+<main class="w3-content" style="max-width:852px">
+    <div class="w3-row-padding m12 l6" >
+      <article class="w3-col w3-half w3-center">
+        <div class="w3-border animation object-wrapper">
+          <img
+          src="https://image.shutterstock.com/image-photo/modern-desktop-computer-wireless-keyboard-260nw-55573504.jpg"
+          alt="Zdjęcie komputera."
+          class="bigger"
+        />
+        <h3>Zestaw komputerowy 1</h3>
+        <ul>
+          <li>karta graficzna</li>
+          <li>plyta glowna</li>
+          <li>procesor</li>
+          <li>pamiec ram</li>
+        </ul>
+        </div>
+      </article>
+      <article class="w3-col w3-half w3-center">
+        <div class="w3-border animation object-wrapper">
+          <img
+          src="https://image.shutterstock.com/image-photo/modern-desktop-computer-wireless-keyboard-260nw-55573504.jpg"
+          alt="Zdjęcie komputera."
+          class="bigger"
+        />
+        <h3>Zestaw komputerowy 1</h3>
+        <ul>
+          <li>karta graficzna</li>
+          <li>plyta glowna</li>
+          <li>procesor</li>
+          <li>pamiec ram</li>
+        </ul>
+        </div>
+      </article>
+    </div>
+    <div class="w3-row-padding m12 l6">
+      <article class="w3-col w3-quarter w3-center">
+        <div  class="w3-border animation object-wrapper">
+          <img
+          src="https://www.pngall.com/wp-content/uploads/2016/04/PC-Mouse-Free-Download-PNG.png"
+          alt="Zdjęcie myszy."
+          class="mouse-img"
+        />
+        <h3>Mysz</h3>
+        </div>
+      </article>
+      <article class="w3-col w3-quarter w3-center">
+        <div  class="w3-border animation object-wrapper">
+          <img
+          src="https://www.pngall.com/wp-content/uploads/2016/04/PC-Mouse-Free-Download-PNG.png"
+          alt="Zdjęcie myszy."
+          class="mouse-img"
+        />
+        <h3>Mysz</h3>
+        </div>
+      </article>
+      <article class="w3-col w3-quarter w3-center">
+        <div  class="w3-border animation object-wrapper">
+          <img
+          src="https://www.pngall.com/wp-content/uploads/2016/04/PC-Mouse-Free-Download-PNG.png"
+          alt="Zdjęcie myszy."
+          class="mouse-img"
+        />
+        <h3>Mysz</h3>
+        </div>
+      </article>
+      <article class="w3-col w3-quarter w3-center">
+        <div  class="w3-border animation object-wrapper">
+          <img
+          src="https://www.pngall.com/wp-content/uploads/2016/04/PC-Mouse-Free-Download-PNG.png"
+          alt="Zdjęcie myszy."
+          class="mouse-img"
+        />
+        <h3>Mysz</h3>
+        </div>
+      </article>
+    </div>
+  </div>
+</main>
     <div class="w3-container">
       <img src="" alt="">
-
     </div>
     <footer class="w3-bottom w3-green">
       <button class="w3-button">
       </button>
       <a href="mailto:your.email.address" class="w3-none"> Kontakt </a>
-
     </footer>
     <script src="https://www.w3schools.com/lib/w3.js"></script>
   </body>
