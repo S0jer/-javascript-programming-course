@@ -2,27 +2,321 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/react/umd/react.development.js" crossorigin=""></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.development.js" crossorigin=""></script>
+  <script src="https://unpkg.com/babel-standalone/babel.min.js"></script>
   <title>Animation</title>
-  <script src="https://unpkg.com/react@16.13.1/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@16.13.1/umd/react-dom.development.js"></script>
+  <script src="script2.js"></script>
 </head>
 
 <body>
   <div id="root"></div>
-  <script src="script2.js" defer></script>
-
   <script type="text/babel">
-    ReactDOM.render(
-      <div>
-        <Counter />
-        <Result />
-        <Iterations />
-      </div>,
-      document.getElementById('root')
-    );
-  </script>
-</body>
 
+    class Counter extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          value: 0,
+          i: 1
+        };
+      }
+
+
+      startAnimation() {
+        document.getElementById("start").disabled = true;
+        document.getElementById("stop").disabled = false;
+        animation = window.requestAnimationFrame(step);
+      }
+
+
+      step() {
+        document.getElementById("counter").value = i++;
+        animation = window.requestAnimationFrame(step);
+      }
+
+
+      stopAnimation() {
+        document.getElementById("start").disabled = false;
+        document.getElementById("stop").disabled = true;
+        window.cancelAnimationFrame(animation)
+      }
+
+      render() {
+        return (
+          <div>
+            <label htmlFor="counter">Counter→</label>
+            <output id="counter" style={{ fontSize: '4vh', color: 'red' }}>
+              {this.state.value}
+            </output>
+            <br />
+            <button id="start" onClick={this.props.startAnimation}>
+              Start
+            </button>
+            <button id="stop" disabled onClick={this.props.stopAnimation}>
+              Stop
+            </button>
+            <br />
+            <br />
+          </div>
+        );
+      }
+    }
+
+    class Result extends React.Component {
+      render() {
+        return (
+          <div>
+            <label htmlFor={this.props.id}>Result:</label>
+            <output id={this.props.id}>{this.props.value}</output>
+            <br />
+          </div>
+        );
+      }
+    }
+
+
+    class NumberOfIterations extends React.Component {
+      render() {
+        return (
+          <div>
+            <br />
+            <label htmlFor={this.props.iterationsId}>Number of iterations:</label>
+            <input id={this.props.iterationsId} type="text" defaultValue="50" />
+            <button onClick={this.props.onClick}>Run calculations</button>
+          </div>
+        );
+      }
+    }
+
+    
+    class IterationWrapper extends React.Component {
+      render() {
+        return (
+          <div>
+            <Result />
+            <NumberOfIterations />
+          </div>
+        );
+      }
+    }
+
+
+    class App extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          worker: new Worker("worker2.js"),
+          startButton: document.getElementById("start"),
+          stopButton: document.getElementById("stop"),
+          runMainButton: document.getElementById("run_main"),
+          runWorkerButton: document.getElementById("run_worker"),
+          primes: [],
+          i: 0,
+          counterValue: 0,
+          resultMainValue: 0,
+          resultWorkerValue: 0,
+          iterationsMain: 50,
+          iterationsWorker: 50,
+          animationId: null
+        };
+      }
+
+      calculatePrimes() {
+        const iterations = document.getElementById("iterations_main").value || 50;
+
+        // Source: https://udn.realityripple.com/docs/Tools/Performance/Scenarios/Intensive_JavaScript
+        let primes = [];
+        for (let i = 0; i < iterations; i++) {
+          let candidate = i * (1000000000 * Math.random());
+          let isPrime = true;
+          for (let c = 2; c <= Math.sqrt(candidate); ++c) {
+            if (candidate % c === 0) {
+              // not prime
+              isPrime = false;
+              break;
+            }
+          }
+          if (isPrime) {
+            primes.push(candidate);
+          }
+        }
+        document.getElementById("result_main").value = primes;
+    }
+
+
+    calculatePrimesUsingWorker() {
+        const iterations = document.getElementById("iterations_worker").value || 50;
+        // Source: https://udn.realityripple.com/docs/Tools/Performance/Scenarios/Intensive_JavaScript
+        worker.postMessage(iterations);
+    }
+
+
+    // worker.onmessage = function(event)
+    // {
+    //     document.getElementById("result_worker").value = event.data;
+    // }
+
+
+    startAnimation() {
+      startButton.disabled = true;
+      stopButton.disabled = false;
+      animation = window.requestAnimationFrame(step);
+    }
+
+
+    step() {
+      document.getElementById("counter").value = i++;
+      animation = window.requestAnimationFrame(step);
+    }
+
+
+    stopAnimation() {
+      startButton.disabled = false;
+      stopButton.disabled = true;
+      window.cancelAnimationFrame(animation)
+    }
+
+      // calculatePrimes() {
+      //   const iterations = this.state.iterationsMain;
+      //   let primes = [];
+      //   for (let i = 0; i < iterations; i++) {
+      //     let candidate = i * (1000000000 * Math.random());
+      //     let isPrime = true;
+      //     for (let c = 2; c <= Math.sqrt(candidate); ++c) {
+      //       if (candidate % c === 0) {
+      //         // not prime
+      //         isPrime = false;
+      //         break;
+      //       }
+      //     }
+      //     if (isPrime) {
+      //       primes.push(candidate);
+      //     }
+      //   }
+      //   this.setState({ resultMainValue: primes.length });
+      // }
+
+      // calculatePrimesUsingWorker() {
+      //   const iterations = this.state.iterationsWorker;
+      //   worker.postMessage(iterations);
+      // }
+
+      render() {
+        return (
+          <div>
+            <Counter />
+            <IterationWrapper />
+          </div>
+        );
+      }
+    }
+
+    const container = document.getElementById('root');
+    const root = ReactDOM.createRoot(container);
+    root.render(<App />);
+
+      // startAnimation() {
+      //   this.setState({ animationId
+      //   })};
+
+    </script>      
+  </body>
 </html>
+
+
+
+<!-- // <!DOCTYPE html>
+// <html lang="en">
+//   <head>
+//     <meta charset="UTF-8">
+//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//     <title>Animation</title>
+//     <script src="https://unpkg.com/react/umd/react.development.js"
+//           crossorigin=""></script>
+//     <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"
+//           crossorigin=""></script>
+//     <script src="https://unpkg.com/babel-standalone/babel.min.js"></script>
+//   </head>
+//   <body>
+//     <div id="root"></div>
+//     <script type="text/babel">
+
+//       class Counter extends React.Component {
+//         constructor(props) {
+//           super(props);
+//           this.state = {
+//             counter: 0
+//           };
+//         };
+//         startAnimation = () => {
+//           this.props.onStartAnimation();
+//         }
+//         stopAnimation = () => {
+//           this.props.onStopAnimation();
+//         }
+//         render() {
+//           return (
+//               <div>
+//                 <h2>requestAnimationFrame()</h2>
+//                 <label>Counter→</label>
+//                 <output id="counter">0</output>
+//                 <br />
+//                 <button id="start" type="button">Start</button>
+//                 <button id="stop" type="button" disabled>Stop</button>
+//               </div>
+//           );
+//         }
+//       }
+
+//       class Result extends React.Component {
+//       constructor(props) {
+//         super(props);
+//         this.state = {
+//           result: 0
+//         };
+//       }
+
+//       render() {
+//         return (
+//           <div>
+//             <h2>Time-consuming calculations — version {this.props.version}</h2>
+//             <label htmlFor="result">Result:</label>
+//             <output id="result">{this.props.resultValue}</output>
+//             <br />
+//             <label htmlFor="iterations">Number of iterations:</label>
+//             <input id="iterations" type="text" value={this.props.iterationsValue} onChange={this.props.onIterationsChange} />
+//             <button onClick={this.props.onRunCalculations}>Run calculations</button>
+//           </div>
+//         );
+//       }
+//     }
+
+//     class IterationsComponent extends React.Component {
+//       render() {
+//         return (
+//           <div>
+//             <h2>Time-consuming calculations — version {this.props.version}</h2>
+//             <label htmlFor="result">Result:</label>
+//             <output id="result">{this.props.resultValue}</output>
+//             <br />
+//             <label htmlFor="iterations">Number of iterations:</label>
+//             <input id="iterations" type="text" value={this.props.iterationsValue} onChange={this.props.onIterationsChange} />
+//             <button onClick={this.props.onRunCalculations}>Run calculations</button>
+//           </div>
+//         );
+//       }
+//     }
+
+
+
+//     const container = document.getElementById('root');
+//     const root = ReactDOM.createRoot(container);
+//     root.render(<Counter />);
+//     root.render(<Result />);
+//     root.render(<IterationsComponent />);
+
+
+//     </script>
+//   </body>
+// </html> -->

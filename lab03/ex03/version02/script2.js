@@ -1,11 +1,19 @@
-const worker = new Worker("worker.js");
+const worker = new Worker("worker2.js");
+const startButton = document.getElementById("start");
+const stopButton = document.getElementById("stop");
+const runMainButton = document.getElementById("run_main");
+const runWorkerButton = document.getElementById("run_worker");
+
+
+
 let animation;
 let primes = [];
 let i = 0;
 
 
 function calculatePrimes() {
-    const iterations = document.forms[0].iterations_main.value || 50;
+    const iterations = document.getElementById("iterations_main").value || 50;
+
     // Source: https://udn.realityripple.com/docs/Tools/Performance/Scenarios/Intensive_JavaScript
     let primes = [];
     for (let i = 0; i < iterations; i++) {
@@ -22,12 +30,12 @@ function calculatePrimes() {
         primes.push(candidate);
       }
     }
-    return primes;
+    document.getElementById("result_main").value = primes;
 }
 
 
 function calculatePrimesUsingWorker() {
-    const iterations = document.forms[0].iterations_worker.value || 50;
+    const iterations = document.getElementById("iterations_worker").value || 50;
     // Source: https://udn.realityripple.com/docs/Tools/Performance/Scenarios/Intensive_JavaScript
     worker.postMessage(iterations);
 }
@@ -35,26 +43,36 @@ function calculatePrimesUsingWorker() {
 
 worker.onmessage = function(event)
 {
-    document.forms[0].result_worker.value = event.data;
+    document.getElementById("result_worker").value = event.data;
 }
 
 
 function startAnimation() {
-  document.forms[0].start.disabled = true;
-  document.forms[0].stop.disabled = false;
+  startButton.disabled = true;
+  stopButton.disabled = false;
   animation = window.requestAnimationFrame(step);
 }
 
 
 function step() {
-  document.forms[0].counter.value = i++;
+  document.getElementById("counter").value = i++;
   animation = window.requestAnimationFrame(step);
 }
 
 
 function stopAnimation() {
-  document.forms[0].start.disabled = false;
-  document.forms[0].stop.disabled = true;
+  startButton.disabled = false;
+  stopButton.disabled = true;
   window.cancelAnimationFrame(animation)
 }
+
+
+// startButton.addEventListener('click', startAnimation);
+// stopButton.addEventListener('click', stopAnimation);
+// runMainButton.addEventListener('click', calculatePrimes);
+// runWorkerButton.addEventListener('click', calculatePrimesUsingWorker);
+
+// document.getElementById("animationForm").addEventListener("submit", function(event) {
+//   event.preventDefault();
+// });
 
