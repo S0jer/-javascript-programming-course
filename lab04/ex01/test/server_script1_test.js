@@ -23,16 +23,30 @@ describe('GET /', () => {
     });
 });
 
-describe('POST /', () => {
+describe('GET /submit', () => {
     it('responds with welcome', (done) => {
         server
-            .post('/')
-            .send('name=john')
-            .expect('Content-Type', /plain/)
-            .expect(200, 'Hello john')
+            .get('/submit')
+            .query({ name: 'róża' })
+            .expect(200, 'Hello róża')
             .end((err, res) => {
                 if (err) return done(err);
                 return done();
             });
     });
 });
+
+describe('POST /', () => {
+    it('responds with welcome', (done) => {
+        server
+            .post('/')
+            .type('form')
+            .send({ name: 'róża' })
+            .expect(200, 'Hello róża')
+            .end((err, res) => {
+                if (err) return done(err);
+                return done();
+            });
+    });
+});
+// UNIT test end

@@ -1,0 +1,55 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='utf-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1')
+        style.
+            table {
+                width: 100%;
+                table-layout: auto;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid #000;
+                padding: 10px;
+                text-align: left;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+        title Second Express application
+    body
+        main
+            h1 Second Express application
+            table
+                thead
+                    tr
+                        th Nazwisko
+                        th Imię
+                        if students[0].department
+                            th Wydział
+                tbody
+                    each student in students
+                        tr
+                            td= student.lname
+                            td= student.fname
+                            if student.department
+                                td= student.department
+            br
+            br
+            form(method='POST' action='/')
+                label(for='name') Give your name for POST
+                input(name='name')
+                br
+                input(type='submit')
+                input(type='reset')
+            br
+            form(method='GET' action='/submit')
+                label(for='name') Give your name for GET
+                input(name='name')
+                br
+                input(type='submit')
+                input(type='reset')
+            br
+            img(src='/img/panda.jpg', alt='Panda')
+
