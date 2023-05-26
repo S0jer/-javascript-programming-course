@@ -44,8 +44,15 @@ app.use(express.urlencoded({ extended: false }));
 /* "Routes" */
 /* ******** */
 
-app.get("/", async function (request, response) {
-  const students = await Student.find({ department: "IET" }).exec();
+// GET route for all students or a specific department
+app.get("/:department?", async function (request, response) {
+  const department = request.params.department;
+  let students;
+  if (department) {
+    students = await Student.find({ department: department }).exec();
+  } else {
+    students = await Student.find({}).exec();
+  }
   response.render("index", { students }); // Send the students array to the 'index' view
 });
 
